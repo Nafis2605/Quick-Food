@@ -1,0 +1,50 @@
+(define (domain Food_Delivery_Domain)
+  (:requirements :strips :typing :adl :fluents :action-costs)
+  
+  (:types point restaurant customer transport)
+  
+  (:predicates (path ?point ?point)
+               (Restaurant-at ?restaurant ?point)
+               (Customer-at ?customer ?point)
+               (Transport-at ?transport ?point)
+               (PreparingFoodFor ?restaurant ?customer)
+               (CarryingFoodFor ?transport ?customer)
+               (NotCarryingFood ?transport)
+               (ReceivedFood ?customer))
+			   
+	(:functions (total-cost)
+                (distance ?point ?point)
+                (per_km_cost ?transport - transport)
+	)
+
+  (:action Travel
+    :parameters (?transport - transport ?start - point ?destination - point)
+    :precondition (and (Transport-at ?transport ?start) 
+                      (path ?start ?destination))
+    :effect (and (not (Transport-at ?transport ?start)) 
+                      (Transport-at ?transport ?destination) 
+                      (increase (total-cost) (* (distance ?start ?destination)(per_km_cost ?transport)))) 
+   )
+
+  (:action PickUpFood
+    :parameters (?transport - transport ?restaurant - restaurant ?customer - customer ?point - point)
+    :precondition (and (Transport-at ?transport ?point) 
+                        (Restaurant-at ?restaurant ?point) 
+                        (NotCarryingFood ?transport) 
+                        (PreparingFoodFor ?restaurant ?customer))
+    :effect (and (not(NotCarryingFood ?transport)) 
+                      (CarryingFoodFor ?transport ?customer) 
+                      (not (PreparingFoodFor ?restaurant ?customer)))
+   )  
+   
+  (:action DeliverFood
+    :parameters (?transport - transport ?customer - customer ?point - point)
+    :precondition (and (Transport-at ?transport ?point) 
+                        (Customer-at ?customer ?point) 
+                        (CarryingFoodFor ?transport ?customer)
+                        (not(NotCarryingFood ?transport)))
+    :effect (and (NotCarryingFood ?transport) 
+                  (not (CarryingFoodFor ?transport ?customer)) 
+                  (ReceivedFood ?customer))
+   )
+ )
