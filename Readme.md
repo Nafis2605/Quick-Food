@@ -12,6 +12,7 @@ This project comes up with the idea to complete the delivery of the food at the 
 | Restaurants | 3 |
 | Customers | 5 |
 | Transportation | 2 |
+
 ![Map](https://github.com/Nafis2605/Quick-Food/blob/main/FoodSharingMap.png?raw=true)
 - There are **13 Nodes/Points/Places** in this scenario. The **numerical value** within the nodes indicates the cost of travelling between the nodes. The **dual arrow** indicates the possibility of travelling in both ways. 
 - There are 3 restaurants which have been indicated by **Restaurant 1, Restaurant 2, Restaurant 3.**
